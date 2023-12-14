@@ -10,7 +10,17 @@ def process(slnPath, project, new):
         print("{0} project not found!".format(projectPath))
         return
 
-    print(projectPath, " -> ", newPath) 
+    try:
+        # delete vs 2003 project
+        if os.path.exists(oldPath):
+            os.remove(oldPath)
+
+        # rename vs 2005 project to normal name
+        os.rename(projectPath, newPath)
+
+        print(projectPath, " -> ", newPath)
+    except Exception as e:
+        print("{0}: {1}".format(projectPath, str(e)))
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
@@ -39,6 +49,6 @@ if __name__ == "__main__":
         sln[i] = " ".join(tokens)
 
     # write output sln file
-    # slnPath = slnPath.replace("-2005", "")
-    # with open(slnPath, "w") as slnFile:
-    #     slnFile.writelines(sln)
+    slnPath = slnPath.replace("-2005", "")
+    with open(slnPath, "w") as slnFile:
+        slnFile.writelines(sln)

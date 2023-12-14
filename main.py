@@ -1,12 +1,24 @@
 import os
 import sys
 
+def process(slnPath, project, new):
+    projectPath = os.path.join(slnPath, project)
+    newPath = os.path.join(slnPath, new)
+    oldPath = projectPath.replace("-2005", "-2003")
+    
+    if not os.path.exists(projectPath):
+        print("{0} project not found!".format(projectPath))
+        return
+
+    print(projectPath, " -> ", newPath) 
+
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         sys.exit("Provide path to 2005 SLN file")
     
     # read sln file
-    slnPath = sys.argv[1]
+    slnDir = os.path.dirname(sys.argv[1])
+    slnPath = os.path.join(slnDir, sys.argv[1])
     with open(slnPath, "rt") as slnFile:
         sln = slnFile.readlines()
     
@@ -22,9 +34,11 @@ if __name__ == "__main__":
         newPath = projectPath.replace("-2005", "")
         tokens[3] = "\"{0}\",".format(newPath)
 
+        process(slnDir, projectPath, newPath)
+
         sln[i] = " ".join(tokens)
 
     # write output sln file
-    slnPath = slnPath.replace("-2005", "")
-    with open(slnPath, "w") as slnFile:
-        slnFile.writelines(sln)
+    # slnPath = slnPath.replace("-2005", "")
+    # with open(slnPath, "w") as slnFile:
+    #     slnFile.writelines(sln)

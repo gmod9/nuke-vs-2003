@@ -11,7 +11,7 @@ if __name__ == "__main__":
         sln = slnFile.readlines()
     
     # find and parse projects
-    for line in sln:
+    for (i, line) in enumerate(sln):
         if not line.startswith("Project"):
             continue
 
@@ -19,9 +19,12 @@ if __name__ == "__main__":
         projectName = tokens[2][1:-2]
         projectPath = tokens[3][1:-2]
 
-        print(projectName, projectPath)
+        newPath = projectPath.replace("-2005", "")
+        tokens[3] = "\"{0}\",".format(newPath)
+
+        sln[i] = " ".join(tokens)
 
     # write output sln file
-    # slnPath = slnPath.replace("-2005", "")
-    # with open(slnPath, "w") as slnFile:
-    #     slnFile.writelines(sln)
+    slnPath = slnPath.replace("-2005", "")
+    with open(slnPath, "w") as slnFile:
+        slnFile.writelines(sln)
